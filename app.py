@@ -42,3 +42,6 @@ def testcreation():
     else:
         #print('got past rowcount test, fail',file=std.out)
         return 'fail! this username has already been taken'
+@app.route("/login.html")
+def login():
+    return render_template("login.html")
