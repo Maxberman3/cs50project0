@@ -1,9 +1,11 @@
 from flask import Flask,render_template,session,request,redirect, url_for
 #from flask_session import Session
 import os
+import sys
 #from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 #from sqlalchemy.orm import scoped_session, sessionmaker
+from datetime import date
 
 app=Flask(__name__)
 app.secret_key=os.urandom(24)
@@ -41,23 +43,50 @@ def testcreation():
     testresults=db.execute("SELECT * FROM users WHERE username= '"+username+"';").fetchall()
     if len(testresults) == 0:
         db.execute("INSERT INTO users (username,password) VALUES ('"+username+"','"+password+"');")
-        return 'success! this username has not been taken'
+        return render_template("createsuccess.html")
     else:
-        return 'fail! this username has already been taken'
+        return render_template("createfail.html")
 @app.route("/login.html")
 def login():
     return render_template("login.html")
+#tests to see if login and password are in database
 @app.route("/loginsf",methods=['POST'])
 def logintest():
     username=request.form.get("username")
     password=request.form.get("passcode")
     logintest=db.execute("SELECT * FROM users WHERE username= '"+username+"' AND password= '"+password+"';").fetchall()
     if len(logintest) == 0:
-        return 'fail! either the username or password was incorrect'
+        return render_template('loginfail.html')
     else:
         session['username']= username
-        return 'Succesfully logged in!'
+        return render_template("loggedin.html")
+#signs the user out of the session
 @app.route("/signout")
 def signout():
     session.pop('username',None)
     return redirect(url_for('mainpage'))
+#fetches the reviews from the database in order to render them on the site
+@app.route("/reviews.html")
+def reviews():
+    empty=False
+    reviewtable=db.execute("SELECT * FROM reviews;").fetchall()
+    if len(reviewtable) == 0:
+        empty=True
+    return render_template('reviews.html', reviewtable=reviewtable, empty=empty)
+#renders a form for the user to submit a review
+@app.route("/reviewsubmit")
+def reviewsubmit():
+    cruisetable=db.execute("SELECT * FROM cruises;").fetchall()
+    return render_template('reviewform.html', cruisetable=cruisetable)
+#submits the review to the db and redirects to the reviews page
+@app.route("/reviewenter",methods=['POST'])
+def reviewenter():
+    #username=session['username'];
+    username='Sally-Sue'
+    todaysdate=str(date.today())
+    contents=request.form.get("reviewcontents")
+    cruiseid=request.form.get("cruise")
+    contents.replace("'","")
+    insrtcommand="INSERT INTO reviews (username,submission_date,contents,cruise) VALUES ('{}','{}','{}',{})".format(username,todaysdate,contents,cruiseid)
+    db.execute(insrtcommand)
+    return redirect(url_for('reviews'))
