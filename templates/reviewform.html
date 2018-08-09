@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> Review submission </title>
+  <style>
+  body {
+    background-color: lightgrey;
+  }
+  </style>
+</head>
+<body>
+  <form action = "{{url_for('reviewenter')}}", method="post">
+    Select cruise to review:
+  <select name="cruise">
+    {% for cruise in cruisetable %}
+    <option value= "{{cruise.id}}"> {{cruise.origin}} to {{cruise.destination}}</option>
+    {% endfor %}
+  </select>
+</br>
+Review contents: (At least 10 characters and no more than 3000)
+<textarea name="reviewcontents"></textarea>
+<button>Submit</button>
+</body>
+</html>

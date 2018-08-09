@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> Our Reviews!</title>
+  <style>
+  body{
+    background-color: lightgrey;
+  }
+  a.button {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+
+    text-decoration: none;
+    color: inital;
+}
+  </style>
+</head>
+  <body>
+    <a href= "{{url_for('reviewsubmit')}}", class="button">Submit a review</a></br>
+    {% if empty %}
+    <h3> There are no reviews yet </h3>
+    {% else %}
+    <ul>
+      {% for row in reviewtable %}
+      <li> {{row.username}} on {{row.submission_date}}: </br>
+        {{row.contents}}</li>
+        {% endfor %}</ul>
+        {% endif %}
+    </body>
+    </html>
