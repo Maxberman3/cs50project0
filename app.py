@@ -28,9 +28,11 @@ def boatpage():
 @app.route("/page3.html")
 def crewpage():
     return render_template("page3.html")
+#grabs cruises from db to populate table
 @app.route("/page4.html")
 def timespage():
-    return render_template("page4.html")
+    cruises=db.execute("SELECT * FROM cruises;").fetchall()
+    return render_template("page4.html",cruises=cruises)
 #renders createaccount template and posts username and password to the testcreation method/url
 @app.route("/createaccount.html")
 def createaccountpage():

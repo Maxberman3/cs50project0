@@ -8,29 +8,23 @@
 <body>
 <table>
 <tr>
+<th>Cruise Id</th>
+<th>Origin</th>
 <th>Destination</th>
 <th>Departure Time</th>
 <th>Arrival Time</th>
 <th>Return Time</th>
 </tr>
+{% for cruise in cruises %}
 <tr>
-<td> Gatlinburg</td>
-<td> Whenever Tripper wakes up</td>
-<td> Bout two hours after that, if my math's right</td>
-<td> Next day 4PM</td>
+<td>{{cruise.id}}</td>
+<td> {{cruise.origin}}</td>
+<td> {{cruise.destination}}</td>
+<td> {{cruise.departure}}</td>
+<td> {{cruise.arrival}}</td>
+<td> {{cruise.return}}</td>
 </tr>
-<tr>
-<td> Jim Bob's sisters place</td>
-<td> 12 PM</td>
-<td> Jim Bob heads to the bar at 6, so sometime after that</td>
-<td> Jim Bob usually comes back around 2, so prolly before that </td>
-</tr>
-<tr>
-<td> Duck Dynasty Museum</td>
-<td> 1 PM </td>
-<td> 5 PM </td>
-<td> Never, we stayin forever!</td>
-</tr>
+{% endfor %}
 </table>
 </body>
 </html>
