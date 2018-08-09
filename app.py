@@ -81,8 +81,7 @@ def reviewsubmit():
 #submits the review to the db and redirects to the reviews page
 @app.route("/reviewenter",methods=['POST'])
 def reviewenter():
-    #username=session['username'];
-    username='Sally-Sue'
+    username=session['username'];
     todaysdate=str(date.today())
     contents=request.form.get("reviewcontents")
     cruiseid=request.form.get("cruise")
