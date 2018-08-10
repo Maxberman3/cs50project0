@@ -42,6 +42,8 @@ def createaccountpage():
 def testcreation():
     username=request.form.get("username")
     password=request.form.get("passcode")
+    if len(username)<5 or len(password)<5 or len(username)>16 or len(password)>16:
+        return render_template('createfail2.html')
     testresults=db.execute("SELECT * FROM users WHERE username= '"+username+"';").fetchall()
     if len(testresults) == 0:
         db.execute("INSERT INTO users (username,password) VALUES ('"+username+"','"+password+"');")
@@ -87,7 +89,27 @@ def reviewenter():
     todaysdate=str(date.today())
     contents=request.form.get("reviewcontents")
     cruiseid=request.form.get("cruise")
+    if len(cruiseid)==0 or len(contents)<11 or len(contents)>3000:
+        return render_template('reviewsubmitfail.html')
     contents.replace("'","")
     insrtcommand="INSERT INTO reviews (username,submission_date,contents,cruise) VALUES ('{}','{}','{}',{})".format(username,todaysdate,contents,cruiseid)
     db.execute(insrtcommand)
     return redirect(url_for('reviews'))
+@app.route("/ticket_signup")
+def gettix():
+    cruises=db.execute("SELECT id,origin,destination FROM cruises;")
+    return render_template('gettix.html',cruises=cruises)
+@app.route("/ticketsubmit", methods=['POST'])
+def ticketsubmit():
+    firstname=request.form.get("first_name")
+    lastname=request.form.get("last_name")
+    cruise=request.form.get("cruise")
+    if firstname.isspace() or lastname.isspace() or cruise == None or cruise.isspace():
+        return render_template('ticketfail.html')
+    insrtcommand="INSERT INTO passengers (first_name,last_name,cruise) VALUES ('{}','{}',{});".format(firstname,lastname,cruise)
+    db.execute(insrtcommand)
+    passengername=firstname+" "+lastname
+    cruiseinfo=db.execute("SELECT origin,destination FROM cruises WHERE id={};".format(cruise))
+    for cruise in cruiseinfo:
+        print()
+    #return render_template('gottix.html',passengername=passengername, cruiseinfo=cruiseinfo)
