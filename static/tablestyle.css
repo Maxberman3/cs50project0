@@ -1,7 +1,6 @@
 @charset "ISO-8859-1";
 table{
 	border-collapse: collapse;
-	cellpadding: 5px;
 }
 table, th, td{
 	border: 1px solid black;
@@ -10,5 +9,6 @@ th {
 	background-color:lightgray;
 }
 td{
+	padding:8px;
 	text-align:center;
 }
