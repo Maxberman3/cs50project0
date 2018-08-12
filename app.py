@@ -109,7 +109,5 @@ def ticketsubmit():
     insrtcommand="INSERT INTO passengers (first_name,last_name,cruise) VALUES ('{}','{}',{});".format(firstname,lastname,cruise)
     db.execute(insrtcommand)
     passengername=firstname+" "+lastname
-    cruiseinfo=db.execute("SELECT origin,destination FROM cruises WHERE id={};".format(cruise))
-    for cruise in cruiseinfo:
-        print()
-    #return render_template('gottix.html',passengername=passengername, cruiseinfo=cruiseinfo)
+    cruiseinfo=(db.execute("SELECT origin,destination FROM cruises WHERE id={};".format(cruise)).fetchall())[0]
+    return render_template('gottix.html', cruiseinfo=cruiseinfo, passengername=passengername)
