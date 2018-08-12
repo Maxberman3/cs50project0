@@ -95,10 +95,12 @@ def reviewenter():
     insrtcommand="INSERT INTO reviews (username,submission_date,contents,cruise) VALUES ('{}','{}','{}',{})".format(username,todaysdate,contents,cruiseid)
     db.execute(insrtcommand)
     return redirect(url_for('reviews'))
+#renders a template to input passenger information and to choose a cruise to get tickets for. also provides links to individual cruise pages
 @app.route("/ticket_signup")
 def gettix():
-    cruises=db.execute("SELECT id,origin,destination FROM cruises;")
+    cruises=db.execute("SELECT id,origin,destination FROM cruises;").fetchall()
     return render_template('gettix.html',cruises=cruises)
+#inputs the information to the passenger table of the db and informs the passenger their reservation is made as well as details of attendance
 @app.route("/ticketsubmit", methods=['POST'])
 def ticketsubmit():
     firstname=request.form.get("first_name")
@@ -111,3 +113,8 @@ def ticketsubmit():
     passengername=firstname+" "+lastname
     cruiseinfo=(db.execute("SELECT origin,destination FROM cruises WHERE id={};".format(cruise)).fetchall())[0]
     return render_template('gottix.html', cruiseinfo=cruiseinfo, passengername=passengername)
+@app.route("/cruises/<int:cruiseid>")
+def cruisedeets(cruiseid):
+    cruise=db.execute("SELECT * FROM cruises WHERE id={};".format(cruiseid)).fetchall()[0]
+    passengers=db.execute("SELECT first_name,last_name FROM passengers WHERE cruise= {};".format(cruiseid)).fetchall()
+    return render_template('details.html',cruise=cruise,passengers=passengers)
