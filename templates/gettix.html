@@ -16,33 +16,33 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col">
-        <form action="{{url_for('ticketsubmit')}}" method="post">
-          <div class="form-group">
-            <label for= "firstnameinput"> First Name </label>
-            <input type='text' class="form-control" id="first_name" placeholder="Billy-Ray"></br>
-          </div>
-          <div class="form-group">
-            <label for="lastnameinput"> Last Name </label>
-          <input type='text' class= "form-control" id="last_name" placeholder="Chestnut"><br>
-        </div>
-        <div class="form-group">
-          <label for="selectcruise"> Pick your cruise </label>
-          <select class name="form-control" id="cruise">
+        <form action="{{url_for('ticketsubmit')}}" method="POST">
+          <form action="{{url_for('ticketsubmit')}}" method="post">
+          First Name: </br>
+          <input type="text" name="first_name" placeholder="Billy-Ray"></br>
+          Last Name: </br>
+          <input type="text" name="last_name" placeholder="Chestnut"></br>
+          <select name="cruise">
             {% for cruise in cruises %}
-            <option value="{{cruise.id}}">{{cruise.origin}} to {{cruise.destination}}</option>
-            {% endfor %}
-          </select>
-          </br>
-        </div>
-          <button type="submit" class="btn btn-primary"> Submit </button>
+            <option value="{{cruise.id}}"> {{cruise.origin}} to {{cruise.destination}}
+              {% endfor %}
+            </select>
+          <button> Submit </button>
+        </form>
         </form>
       </div>
-        <div class="col">
-          <ul class="nav nav-pills">
+      <div class="col">
+        <h2> Select a cruise to see details such as crew, craft, passengers, departure & arrival times</h2>
+        <ul>
+          {% for cruise in cruises %}
+          <li> <a href="/cruises/{{cruise.id}}">{{cruise.origin}} to {{cruise.destination}}</a> </li>
+          {% endfor %}
+        </ul>
+          {#<ul class="nav nav-pills">
             <li class="nav item">
-              <a class="nav-link active" href="details.html">Cruise Details</a>
+              <a class="nav-link active" href="{{url_for('details')}}">Cruise Details</a>
             </li>
-          </ul>
+          </ul>#}
         </div>
       </div>
     </div>
